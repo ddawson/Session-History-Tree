@@ -1,0 +1,8 @@
+# Content
+content	sessionhistorytree	chrome/content/
+
+# Locales
+locale	sessionhistorytree	en-US	chrome/locale/en-US/
+
+# Overlays
+overlay	chrome://browser/content/browser.xul chrome://sessionhistorytree/content/browserOverlay.xul
