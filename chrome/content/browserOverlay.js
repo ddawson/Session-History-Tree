@@ -16,39 +16,5 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-var sessionHistoryTree = {
-  sStore: Cc["@mozilla.org/browser/sessionstore;1"].
-          getService(Ci.nsISessionStore),
-
-  tabOpenHandler: function (evt) {
-    var theTab = evt.target;
-    var theBrowser = gBrowser.getBrowserForTab(theTab);
-
-    function range (start, end) {
-      for (i = start; i < end; i++) yield i;
-    }
-
-    var curSHTStr = this.sStore.getTabValue(theTab, "sessionHistoryTree");
-    if (!curSHTStr) {
-      let curStateObj = JSON.parse(this.sStore.getTabState(theTab));
-      let newSHTObj = {
-        tree: curStateObj.entries,
-        curPath: [0 for each (i in range(0, curStateObj.index || 0))]
-      };
-      this.sStore.setTabValue(theTab, "sessionHistoryTree",
-                              JSON.stringify(newSHTObj));
-    }
-  },
-};
-
-window.addEventListener(
-  "load",
-  function __shtWindowLoadListener () {
-    gBrowser.tabContainer.addEventListener(
-      "TabOpen",
-      function (evt) { sessionHistoryTree.tabOpenHandler(evt); },
-      false);
-
-    window.removeEventListener("load", __shtWindowLoadListener, false);
-  },
-  false);
+Cu.import("resource://sessionhistorytree/sessionHistoryTree.jsm");
+sessionHistoryTree.registerLoadHandler(window);
