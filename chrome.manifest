@@ -4,8 +4,20 @@ resource	sessionhistorytree	chrome/content/
 # Content
 content		sessionhistorytree	chrome/content/
 
+# Skin
+skin		sessionhistorytree	default	chrome/skin/
+
 # Locales
 locale		sessionhistorytree	en-US	chrome/locale/en-US/
 
 # Overlays
 overlay	chrome://browser/content/browser.xul chrome://sessionhistorytree/content/browserOverlay.xul
+
+# Stylesheets
+style	chrome://browser/content/browser.xul chrome://sessionhistorytree/skin/overlay.css
+style	chrome://browser/content/browser.xul chrome://sessionhistorytree/skin/button.css
+style	chrome://browser/content/browser.xul chrome://sessionhistorytree/skin/button-winfx4.css appversion>=4.0b1pre os=WINNT
+style	chrome://browser/content/browser.xul chrome://sessionhistorytree/skin/button-macfx4.css appversion>=4.0b1pre os=Darwin
+style	chrome://global/content/customizeToolbar.xul chrome://sessionhistorytree/skin/button.css
+style	chrome://browser/content/customizeToolbar.xul chrome://sessionhistorytree/skin/button-winfx4.css appversion>=4.0b1pre os=WINNT
+style	chrome://browser/content/customizeToolbar.xul chrome://sessionhistorytree/skin/button-macfx4.css appversion>=4.0b1pre os=Darwin

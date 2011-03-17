@@ -16,5 +16,18 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-Cu.import("resource://sessionhistorytree/sessionHistoryTree.jsm");
-sessionHistoryTree.registerLoadHandler(window);
+@namespace
+  url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+.sessionhistorytree-submenu {
+  list-style-image: url("chrome://sessionhistorytree/skin/tree16.png");
+}
+
+.sessionhistorytree-submenu > .menu-iconic-text,
+.sessionhistorytree-submenu > .menu-accel-container {
+  display: none;
+}
+
+#clear-sessionhistorytree-menuitem {
+  list-style-image: url("chrome://sessionhistorytree/skin/treex16.png");
+}

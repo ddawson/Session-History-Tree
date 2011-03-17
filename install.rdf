@@ -5,15 +5,17 @@
     <id>sessionhistorytree@daniel.dawson</id>
     <type>2</type>
     <name>Session History Tree</name>
-    <version>0.1</version>
+    <version>0.1a1</version>
     <creator>Daniel Dawson &lt;ddawson@icehouse.net&gt;</creator>
     <description>Turns session history into a browsable tree.</description>
     <optionsURL>chrome://sessionhistorytree/content/prefwindow.xul</optionsURL>
+    <iconURL>chrome://sessionhistorytree/skin/tree48.png</iconURL>
+    <icon64URL>chrome://sessionhistorytree/skin/tree64.png</icon64URL>
 
     <targetApplication>
       <RDF:Description>
         <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id> <!-- Firefox -->
-        <minVersion>3.5</minVersion>
+        <minVersion>3.6</minVersion>
         <maxVersion>4.0.*</maxVersion>
       </RDF:Description>
     </targetApplication>

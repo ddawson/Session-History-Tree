@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Session History Tree, extension for Firefox 3.5+
+    Session History Tree, extension for Firefox 3.6+
     Copyright (C) 2011  Daniel Dawson <ddawson@icehouse.net>
 
     This program is free software: you can redistribute it and/or modify
@@ -17,8 +17,25 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<!DOCTYPE overlay SYSTEM "chrome://sessionhistorytree/locale/strings.dtd">
+<!DOCTYPE overlay SYSTEM
+          "chrome://sessionhistorytree/locale/browserOverlay.dtd">
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script type="application/javascript"
           src="chrome://sessionhistorytree/content/browserOverlay.js"/>
+  <commandset>
+    <command id="clear-sessionhistorytree"
+             label="&clear_sessionhistorytree.label;"
+             tooltiptext="&clear_sessionhistorytree.tooltip;"
+             oncommand="sessionHistoryTree.clearTree(window);"/>
+  </commandset>
+  <menupopup id="menu_ToolsPopup">
+    <menuitem id="clear-sessionhistorytree-menuitem"
+              class="menuitem-iconic"
+              command="clear-sessionhistorytree"/>
+  </menupopup>
+  <toolbarpalette id="BrowserToolbarPalette">
+    <toolbarbutton id="clear-sessionhistorytree-button"
+                   class="toolbarbutton-1 chromeclass-toolbar-additional"
+                   command="clear-sessionhistorytree"/>
+  </toolbarpalette>
 </overlay>

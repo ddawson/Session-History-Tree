@@ -16,5 +16,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-Cu.import("resource://sessionhistorytree/sessionHistoryTree.jsm");
-sessionHistoryTree.registerLoadHandler(window);
+@namespace
+  url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+#clear-sessionhistorytree-button {
+  list-style-image: url("chrome://sessionhistorytree/skin/treex24.png");
+}
+
+toolbar[iconsize="small"] #clear-sessionhistorytree-button {
+  list-style-image: url("chrome://sessionhistorytree/skin/treex16.png");
+}
