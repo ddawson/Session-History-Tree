@@ -52,8 +52,9 @@ function thisWrap (func, thisObj)
   function () func.apply(thisObj, arguments);
 
 var sessionHistoryTree = {
+  nextWindowID: 0,
+  nextBrowserID: 0,
   sHistoryHandlers: {},
-  browserWindows: {},
 
   registerLoadHandler: function (win) {
     win.addEventListener(
@@ -61,18 +62,18 @@ var sessionHistoryTree = {
   },
 
   windowLoadHandler: function __wlHandler (evt) {
+    log("new window");
     var theWindow = evt.target.defaultView;
-    sessionHistoryTree.sHistoryHandlers[theWindow] = {};
+    sessionHistoryTree.giveNewWindowID(theWindow);
     var gBr = theWindow.gBrowser, tc = gBr.tabContainer;
     for (let i = 0; i < tc.itemCount; i++) {
+      log("found a tab initially");
       let theTab = tc.getItemAtIndex(i),
           theBrowser = gBr.browsers[i];
       let callback = thisWrap(function () {
-        this.initTree(theTab);
+        log("initial tab loaded");
         let newSHHandler = new SHistoryHandler(theTab, theBrowser);
-        theBrowser.sessionHistory.addSHistoryListener(newSHHandler);
-        this.sHistoryHandlers[theWindow][theBrowser] = newSHHandler;
-        this.browserWindows[theBrowser] = theWindow;
+        this.giveNewBrowserID(theWindow, theBrowser, newSHHandler);
         theTab.removeEventListener("load", callback, false);
       }, sessionHistoryTree);
       theTab.addEventListener("load", callback, false);
@@ -81,31 +82,32 @@ var sessionHistoryTree = {
     tc.addEventListener(
       "TabOpen",
       thisWrap(function (evt) {
+          log("TabOpen");
           var theTab = evt.target, theBrowser = gBr.getBrowserForTab(theTab);
-          this.initTree(theTab);
           var newSHHandler = new SHistoryHandler(theTab, theBrowser);
-          theBrowser.sessionHistory.addSHistoryListener(newSHHandler);
           var theWindow = theTab.ownerDocument.defaultView;
-          this.sHistoryHandlers[theWindow][theBrowser] = newSHHandler;
-          this.browserWindows[theBrowser] = theWindow;
+          this.giveNewBrowserID(theWindow, theBrowser, newSHHandler);
         }, sessionHistoryTree),
       false);
 
     tc.addEventListener(
       "TabClose",
       thisWrap(function (evt) {
+          log("TabClose");
           var theTab = evt.target, theBrowser = gBr.getBrowserForTab(theTab);
-          delete this.sHistoryHandlers[theWindow][theBrowser];
+          var winID = theWindow.sessionHistoryTree_ID,
+              brsID = theBrowser.sessionHistoryTree_ID;
+          delete this.sHistoryHandlers[winID][brsID];
         }, sessionHistoryTree),
       false);
 
-    gBr.tabContainer.addEventListener(
+    tc.addEventListener(
       "SSTabRestored",
       thisWrap(function (evt) {
           log("SSTabRestored");
-          var theTab = evt.target, theBrowser = gBr.getBrowserForTab(theTab);
-          for each (var handler in this.sHistoryHandlers[theWindow])
-          handler.endRestorePhase();
+          var winID = theWindow.sessionHistoryTree_ID;
+          for each (let handler in this.sHistoryHandlers[winID])
+            handler.endRestorePhase();
         }, sessionHistoryTree),
       false);
 
@@ -115,46 +117,23 @@ var sessionHistoryTree = {
     theWindow.removeEventListener("load", __wlHandler, false);
   },
 
-  initTree: function (aTab) {
-    var curSHTStr = sStore.getTabValue(aTab, "sessionHistoryTree");
-    if (!curSHTStr) {
-      let newSHTObj = {
-        tree: [],
-        curPathPos: 0,
-        curPathLength: 0
-      };
-      sStore.setTabValue(aTab, "sessionHistoryTree",
-                         JSON.stringify(newSHTObj));
-    }
+  giveNewWindowID: function (aWindow) {
+    var id = this.nextWindowID++;
+    aWindow.sessionHistoryTree_ID = id;
+    this.sHistoryHandlers[id] = {};
+  },
+
+  giveNewBrowserID: function (aWindow, aBrowser, aSHistoryHandler) {
+    var winID = aWindow.sessionHistoryTree_ID,
+        brsID = this.nextBrowserID++;
+    aBrowser.sessionHistoryTree_ID = brsID;
+    this.sHistoryHandlers[winID][brsID] = aSHistoryHandler;
   },
 
   clearTree: function (aWindow) {
-    var tab = aWindow.gBrowser.selectedTab,
-        browser = aWindow.gBrowser.selectedBrowser;
-    var res = promptSvc.confirmEx(
-      browser.contentWindow,
-      strings.GetStringFromName("clearingtree_title"),
-      strings.GetStringFromName("clearingtree_label"),
-      promptSvc.STD_YES_NO_BUTTONS, null, null, null, null, {});
-    if (res != 0) return;
-
-    var st = JSON.parse(sStore.getTabState(tab));
-    var newSHTObj = {
-      tree: [],
-      curPathPos: st.index - 1,
-      curPathLength: st.entries.length
-    };
-
-    var tree = newSHTObj.tree;
-    for (var i = 0; i <= st.entries.length; i++) {
-      let node = {
-        entry: st.entries[i],
-        subtree: []
-      };
-      tree.push(node);
-      tree = node.subtree;
-    }
-    sStore.setTabValue(tab, "sessionHistoryTree", JSON.stringify(newSHTObj));
+    var winID = aWindow.sessionHistoryTree_ID;
+    var brsID = aWindow.gBrowser.selectedBrowser.sessionHistoryTree_ID;
+    this.sHistoryHandlers[winID][brsID].clearTree();
   },
 };
 
@@ -163,29 +142,100 @@ function SHistoryHandler (aTab, aBrowser) {
   this.browser = aBrowser;
   this.restorePhase = true;
   this.numIgnores = -1;
+  this.initTree();
+  this.registerSelf();
 }
 
 SHistoryHandler.prototype = {
   QueryInterface: XPCOMUtils.generateQI([
     Ci.nsISHistoryListener, Ci.nsISupports, Ci.nsISupportsWeakReference]),
 
+  initTree: function () {
+    this.sht = sStore.getTabValue(this.tab, "sessionHistoryTree");
+    if (!this.sht) {
+      this.sht = {
+        tree: [],
+        curPathPos: 0,
+        curPathLength: 0
+      };
+      sStore.setTabValue(this.tab, "sessionHistoryTree",
+                         JSON.stringify(this.sht));
+    }
+  },
+
+  registerSelf: function () {
+    var sHist = this.browser.sessionHistory;
+    try {
+      sHist.removeSHistoryListener(this);
+    } catch (e) {}
+    sHist.addSHistoryListener(this);
+  },
+
   startRestorePhase: function () {
+    log("startRestorePhase (" + this.browser.contentDocument.title + ")");
     this.restorePhase = true;
     this.numIgnores = -1;
   },
 
   endRestorePhase: function () {
+    log("endRestorePhase (" + this.browser.contentDocument.title + ")");
     this.restorePhase = false;
+    this.registerSelf();
+
+    var tabSt = JSON.parse(sStore.getTabState(this.tab));
+    var tree = this.sht.tree;
+    for (var i = 0; i < this.sht.curPathLength; i++)
+      tree = tree[0].subtree;
+    for ( ; i < tabSt.entries.length; i++) {
+      let node = {
+        entry: tabSt.entries[i],
+        subtree: []
+      };
+      tree.unshift(node);
+      tree = node.subtree;
+    }
+    this.sht.curPathPos = tabSt.index;
+    sStore.setTabValue(this.tab, "sessionHistoryTree",
+                       JSON.stringify(this.sht));
+  },
+
+  clearTree: function () {
+    var res = promptSvc.confirmEx(
+      this.browser.contentWindow,
+      strings.GetStringFromName("clearingtree_title"),
+      strings.GetStringFromName("clearingtree_label"),
+      promptSvc.STD_YES_NO_BUTTONS, null, null, null, null, {});
+    if (res != 0) return;
+
+    var st = JSON.parse(sStore.getTabState(this.tab));
+    this.sht = {
+      tree: [],
+      curPathPos: st.index - 1,
+      curPathLength: st.entries.length
+    };
+
+    var tree = this.sht.tree;
+    for (var i = 0; i <= st.entries.length; i++) {
+      let node = {
+        entry: st.entries[i],
+        subtree: []
+      };
+      tree.push(node);
+      tree = node.subtree;
+    }
+    sStore.setTabValue(tab, "sessionHistoryTree", JSON.stringify(this.sht));
+    log("tree cleared");
   },
 
   OnHistoryGoBack: function (aBackURI) {
+    log("HistoryGoBack");
     this.restorePhase = false;
     var tabSt = JSON.parse(sStore.getTabState(this.tab));
-    var sht = JSON.parse(sStore.getTabValue(this.tab, "sessionHistoryTree"));
 
-    var curTree = sht.tree;
+    this.sht.curPathPos = tabSt.index;
+    var curTree = this.sht.tree;
     var curNode, curEntry;
-    for (var i = 0; i < sht.curPathPos; i++) {
+    for (var i = 0; i < this.sht.curPathPos; i++) {
       curNode = curTree[0];
       curEntry = curNode.entry;
       curTree = curNode.subtree;
@@ -194,19 +244,21 @@ SHistoryHandler.prototype = {
     if (curNode)
       curNode.entry = tabSt.entries[tabSt.index - 1];
     
-    sht.curPathPos--;
-    sStore.setTabValue(this.tab, "sessionHistoryTree", JSON.stringify(sht));
+    this.sht.curPathPos--;
+    sStore.setTabValue(this.tab, "sessionHistoryTree",
+                       JSON.stringify(this.sht));
     return true;
   },
 
   OnHistoryGoForward: function (aForwardURI) {
+    log("HistoryGoForward");
     this.restorePhase = false;
     var tabSt = JSON.parse(sStore.getTabState(this.tab));
-    var sht = JSON.parse(sStore.getTabValue(this.tab, "sessionHistoryTree"));
 
-    var curTree = sht.tree;
+    this.sht.curPathPos = tabSt.index;
+    var curTree = this.sht.tree;
     var curNode, curEntry;
-    for (var i = 0; i < sht.curPathPos; i++) {
+    for (var i = 0; i < this.sht.curPathPos; i++) {
       curNode = curTree[0];
       curEntry = curNode.entry;
       curTree = curNode.subtree;
@@ -215,20 +267,22 @@ SHistoryHandler.prototype = {
     if (curNode)
       curNode.entry = tabSt.entries[tabSt.index - 1];
 
-    sht.curPathPos++;
-    sStore.setTabValue(this.tab, "sessionHistoryTree", JSON.stringify(sht));
+    this.sht.curPathPos++;
+    sStore.setTabValue(this.tab, "sessionHistoryTree",
+                       JSON.stringify(this.sht));
     return true;
   },
 
   OnHistoryGotoIndex: function (aIndex, aGotoURI) {
+    log("HistoryGotoIndex");
     if (this.restorePhase) return true;
     this.restorePhase = false;
     var tabSt = JSON.parse(sStore.getTabState(this.tab));
-    var sht = JSON.parse(sStore.getTabValue(this.tab, "sessionHistoryTree"));
 
-    var curTree = sht.tree;
+    this.sht.curPathPos = tabSt.index;
+    var curTree = this.sht.tree;
     var curNode, curEntry;
-    for (var i = 0; i < sht.curPathPos; i++) {
+    for (var i = 0; i < this.sht.curPathPos; i++) {
       curNode = curTree[0];
       curEntry = curNode.entry;
       curTree = curNode.subtree;
@@ -236,17 +290,18 @@ SHistoryHandler.prototype = {
 
     if (curNode)
       curNode.entry = tabSt.entries[tabSt.index - 1];
-    sht.curPathPos = aIndex + 1;
+    this.sht.curPathPos = aIndex + 1;
 
-    sStore.setTabValue(this.tab, "sessionHistoryTree", JSON.stringify(sht));
+    sStore.setTabValue(this.tab, "sessionHistoryTree",
+                       JSON.stringify(this.sht));
     return true;
   },
 
   OnHistoryNewEntry: function (aNewURI) {
+    log("HistoryNewEntry");
     var tabSt = JSON.parse(sStore.getTabState(this.tab));
-    var sht = JSON.parse(sStore.getTabValue(this.tab, "sessionHistoryTree"));
     if (this.restorePhase) {
-      if (this.numIgnores == -1) this.numIgnores = sht.curPathLength;
+      if (this.numIgnores == -1) this.numIgnores = this.sht.curPathLength;
       if (this.numIgnores > 0) {
         this.numIgnores--;
         return true;
@@ -254,9 +309,10 @@ SHistoryHandler.prototype = {
         this.restorePhase = false;
     }
 
-    var curTree = sht.tree;
+    this.sht.curPathPos = tabSt.index;
+    var curTree = this.sht.tree;
     var curNode = null, curEntry = null;
-    for (var i = 0; i < sht.curPathPos; i++) {
+    for (var i = 0; i < this.sht.curPathPos; i++) {
       curNode = curTree[0];
       curEntry = curNode.entry;
       curTree = curNode.subtree;
@@ -266,11 +322,11 @@ SHistoryHandler.prototype = {
     if (curNode)
       curNode.entry = tabSt.entries[curIndex];
 
-    sht.curPathPos++;
+    this.sht.curPathPos++;
     if (curNode && curTree.length)
-      sht.curPathLength = sht.curPathPos;
-    else if (curIndex == sht.curPathLength - 1)
-      sht.curPathLength++;
+      this.sht.curPathLength = this.sht.curPathPos;
+    else if (curIndex == this.sht.curPathLength - 1)
+      this.sht.curPathLength++;
     var newNode = {
       entry: { url: aNewURI.spec, title: "SHTInit", ID: null, scroll: "0,0" },
       subtree: []
@@ -282,19 +338,23 @@ SHistoryHandler.prototype = {
       curTree.splice(-numDel, numDel);
     }
 
-    sStore.setTabValue(this.tab, "sessionHistoryTree", JSON.stringify(sht));
+    sStore.setTabValue(this.tab, "sessionHistoryTree",
+                       JSON.stringify(this.sht));
 
-    var tab = this.tab, browser = this.browser;
+    var tab = this.tab, browser = this.browser, sht = this.sht;
     browser.addEventListener(
       "DOMContentLoaded",
       function __bclHandler () {
+        log("DOMContentLoaded");
         var entry = JSON.parse(sStore.getTabState(tab)).entries[curIndex+1];
         newNode.entry = entry;
-        sStore.setTabValue(tab, "sessionHistoryTree", JSON.stringify(sht));
+        sStore.setTabValue(tab, "sessionHistoryTree",
+                           JSON.stringify(sht));
         var domWin = browser.contentWindow;
         domWin.addEventListener(
           "load",
           function __wlHandler () {
+            log("load");
             var entry =
               JSON.parse(sStore.getTabState(tab)).entries[curIndex+1];
             newNode.entry = entry;
@@ -310,18 +370,19 @@ SHistoryHandler.prototype = {
   },
 
   OnHistoryPurge: function (aNumEntries) {
+    log("HistoryPurge (" + aNumEntries + ")");
     if (this.restorePhase) return true;
-    log("Purge " + aNumEntries);
-    var sht = JSON.parse(sStore.getTabValue(this.tab, "sessionHistoryTree"));
+    var tabSt = JSON.parse(sStore.getTabState(this.tab));
 
-    var curRoot = sht.tree;
-    sht.curPathPos -= aNumEntries;
+    var curRoot = this.sht.tree;
+    sht.curPathPos = tabSt.index - aNumEntries;
     for (var i = 0; i < aNumEntries; i++)
       curRoot = curRoot.reduce(
         function (prev, cur) prev.concat(cur.subtree), []);
-    sht.tree = curRoot;
+    this.sht.tree = curRoot;
 
-    sStore.setTabValue(this.tab, "sessionHistoryTree", JSON.stringify(sht));
+    sStore.setTabValue(this.tab, "sessionHistoryTree",
+                       JSON.stringify(this.sht));
     return true;
   },
 
@@ -330,6 +391,7 @@ SHistoryHandler.prototype = {
 
 function getSHTFillHistoryMenu (aOldFHM)
   function (aParent) {
+    log("FillHistoryMenu");
     var res = aOldFHM(aParent);
     if (!res) return false;
 
@@ -389,6 +451,7 @@ function getSHTPathMultis (aTab, aEndIndex) {
 }
 
 function fillTreeSubmenu (evt) {
+  log("fillTreeSubmenu");
   var popup = evt.target;
   var popupPathStr = popup.getAttribute("shtpath");
   if (popupPathStr == "")
@@ -396,11 +459,14 @@ function fillTreeSubmenu (evt) {
   else
     popupPath = popupPathStr.split(",");
 
-  var document = popup.ownerDocument;
-  var tab = document.defaultView.gBrowser.selectedTab;
+  var document = popup.ownerDocument, window = document.defaultView,
+      tab = window.gBrowser.selectedTab,
+      browser = window.gBrowser.selectedBrowser,
+      winID = window.sessionHistoryTree_ID,
+      brsID = browser.sessionHistoryTree_ID;
 
   var ts = JSON.parse(sStore.getTabState(tab));
-  var sht = JSON.parse(sStore.getTabValue(tab, "sessionHistoryTree"));
+  var sht = sessionHistoryTree.sHistoryHandlers[winID][brsID].sht;
   var tree = sht.tree, node,
       isCurPath = (popupPath.length == sht.curPathPos - 1);
   for (var i = 0; i < popupPath.length; i++) {
@@ -442,7 +508,7 @@ function fillTreeSubmenu (evt) {
 
     let row = document.createElement("row");
     let item = document.createElement("menuitem");
-    item.setAttribute("label", entry.title);
+    item.setAttribute("label", entry.title || entry.url);
     item.setAttribute("uri", entry.url);
     item.setAttribute("tooltiptext",
                       strings.GetStringFromName("switchpath_tooltip"));
@@ -455,8 +521,10 @@ function fillTreeSubmenu (evt) {
     } else {
       item.className = "menuitem-iconic";
       let uri = ioSvc.newURI(entry.url, null, null);
-      let iconURL = faviconSvc.getFaviconForPage(uri).spec;
-      item.style.listStyleImage = "url(" + iconURL + ")";
+      try {
+        let iconURL = faviconSvc.getFaviconForPage(uri).spec;
+        item.style.listStyleImage = "url(" + iconURL + ")";
+      } catch (e) {}
     }
     row.appendChild(item);
 
@@ -479,12 +547,15 @@ function fillTreeSubmenu (evt) {
 }
 
 function switchPath (evt) {
+  log("switchPath");
   evt.stopPropagation();
   var item = evt.target, targetPath = item.getAttribute("shtpath").split(",");
   var window = item.ownerDocument.defaultView,
       browser = window.gBrowser.selectedBrowser,
-      tab = window.gBrowser.selectedTab;
-  var sht = JSON.parse(sStore.getTabValue(tab, "sessionHistoryTree"));
+      tab = window.gBrowser.selectedTab,
+      winID = window.sessionHistoryTree_ID,
+      brsID = browser.sessionHistoryTree_ID;
+  var sht = sessionHistoryTree.sHistoryHandlers[winID][brsID].sht;
   var entries = [];
   var tree = sht.tree, node;
   for (var i = 0; i < targetPath.length; i++) {
@@ -505,6 +576,8 @@ function switchPath (evt) {
   var ts = JSON.parse(sStore.getTabState(tab));
   ts.entries = entries;
   ts.index = i;
-  sessionHistoryTree.sHistoryHandlers[window][browser].startRestorePhase();
+  var winID = window.sessionHistoryTree_ID,
+      brsID = browser.sessionHistoryTree_ID;
+  sessionHistoryTree.sHistoryHandlers[winID][brsID].startRestorePhase();
   sStore.setTabState(tab, JSON.stringify(ts));
 }
