@@ -97,6 +97,7 @@ var sessionHistoryTree = {
           var theTab = evt.target, theBrowser = gBr.getBrowserForTab(theTab);
           var winID = theWindow.sessionHistoryTree_ID,
               brsID = theBrowser.sessionHistoryTree_ID;
+          this.sHistoryHandlers[winID][brsID].unregisterSelf();
           delete this.sHistoryHandlers[winID][brsID];
         }, sessionHistoryTree),
       false);
@@ -144,11 +145,14 @@ function SHistoryHandler (aTab, aBrowser) {
   this.numIgnores = -1;
   this.initTree();
   this.registerSelf();
+  this.pendingHistoryNodes = {};
+  this.pendingTimers = {};
 }
 
 SHistoryHandler.prototype = {
   QueryInterface: XPCOMUtils.generateQI([
-    Ci.nsISHistoryListener, Ci.nsISupports, Ci.nsISupportsWeakReference]),
+    Ci.nsISHistoryListener, Ci.nsIWebProgressListener, Ci.nsISupports,
+    Ci.nsISupportsWeakReference]),
 
   initTree: function () {
     this.sht = sStore.getTabValue(this.tab, "sessionHistoryTree");
@@ -169,6 +173,17 @@ SHistoryHandler.prototype = {
       sHist.removeSHistoryListener(this);
     } catch (e) {}
     sHist.addSHistoryListener(this);
+    var wp = this.browser.webProgress;
+    try {
+      wp.removeProgressListener(this);
+    } catch (e) {}
+    wp.addProgressListener(this,
+                           wp.NOTIFY_STATE_DOCUMENT | wp.NOTIFY_LOCATION);
+  },
+
+  unregisterSelf: function () {
+    this.browser.sessionHistory.removeSHistoryListener(this);
+    this.tab = this.browser = null;
   },
 
   startRestorePhase: function () {
@@ -183,6 +198,7 @@ SHistoryHandler.prototype = {
     this.registerSelf();
 
     var tabSt = JSON.parse(sStore.getTabState(this.tab));
+    this.sht = JSON.parse(sStore.getTabValue(this.tab, "sessionHistoryTree"));
     var tree = this.sht.tree;
     for (var i = 0; i < this.sht.curPathLength; i++)
       tree = tree[0].subtree;
@@ -341,7 +357,8 @@ SHistoryHandler.prototype = {
     sStore.setTabValue(this.tab, "sessionHistoryTree",
                        JSON.stringify(this.sht));
 
-    var tab = this.tab, browser = this.browser, sht = this.sht;
+    this.pendingHistoryNodes[aNewURI.spec] = [newNode, curIndex];
+/*    var tab = this.tab, browser = this.browser, sht = this.sht;
     browser.addEventListener(
       "DOMContentLoaded",
       function __bclHandler () {
@@ -364,7 +381,7 @@ SHistoryHandler.prototype = {
           false);
         browser.removeEventListener("DOMContentLoaded", __bclHandler, false);
       },
-      false);
+      false);*/
 
     return true;
   },
@@ -387,6 +404,59 @@ SHistoryHandler.prototype = {
   },
 
   OnHistoryReload: function (aReloadURI, aReloadFlags) true,
+
+  onStateChange: function (aWebProgress, aRequest, aStateFlags, aStatus) {
+    if (!((aStateFlags & Ci.nsIWebProgressListener.STATE_TRANSFERRING
+           || aStateFlags & Ci.nsIWebProgressListener.STATE_STOP)
+          && aStateFlags & Ci.nsIWebProgressListener.STATE_IS_DOCUMENT)
+        || !(aRequest.name in this.pendingHistoryNodes))
+      return;
+    log("onStateChange: " + aRequest.name +
+        (aStateFlags & Ci.nsIWebProgressListener.STATE_TRANSFERRING ?
+          ", TRANSFERRING" : ", STOP"));
+
+    var thisObj = this;
+
+    function __update () {
+      log("onStateChange :: __update");
+      var [newNode, index] = thisObj.pendingHistoryNodes[aRequest.name];
+      log("newNode = " + newNode + ", index = " + index);
+      newNode.entry =
+        JSON.parse(sStore.getTabState(thisObj.tab)).entries[index+1];
+      log("Entry: " + JSON.stringify(newNode.entry));
+      sStore.setTabValue(thisObj.tab, "sessionHistoryTree",
+                         JSON.stringify(thisObj.sht));
+      if (aStateFlags & Ci.nsIWebProgressListener.STATE_STOP)
+        delete thisObj.pendingTimers[aRequest.name];
+    }
+
+    if (aStateFlags & Ci.nsIWebProgressListener.STATE_STOP) {
+      let timer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
+      timer.initWithCallback(
+        { notify: __update }, 1000, Ci.nsITimer.TYPE_ONE_SHOT);
+      this.pendingTimers[aRequest.name] = timer;
+    } else
+      __update();
+  },
+
+  onProgressChange: function () {},
+
+  onLocationChange: function (aWebProgress, aRequest, aLocation) {
+    log("onLocationChange: " + aLocation.spec);
+    if (aWebProgress.DOMWindow != aWebProgress.DOMWindow.top
+        || !(aLocation.spec in this.pendingHistoryNodes))
+      return;
+
+    var [newNode, index] = this.pendingHistoryNodes[aLocation.spec];
+    newNode.entry = JSON.parse(sStore.getTabState(this.tab)).entries[index+1];
+    sStore.setTabValue(this.tab, "sessionHistoryTree",
+                       JSON.stringify(this.sht));
+    delete this.pendingHistoryNodes[aLocation.spec];
+    this.pendingHistoryNodes[aRequest.name] = [newNode, index];
+  },
+
+  onStatusChange: function () {},
+  onSecurityChange: function () {},
 };
 
 function getSHTFillHistoryMenu (aOldFHM)
