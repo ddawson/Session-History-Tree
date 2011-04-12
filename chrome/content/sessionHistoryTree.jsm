@@ -151,8 +151,10 @@ SHistoryHandler.prototype = {
     Ci.nsISHistoryListener, Ci.nsISupports, Ci.nsISupportsWeakReference]),
 
   initTree: function () {
-    this.sht = sStore.getTabValue(this.tab, "sessionHistoryTree");
-    if (!this.sht) {
+    var shtStr = sStore.getTabValue(this.tab, "sessionHistoryTree");
+    if (shtStr)
+      this.sht = JSON.parse(shtStr);
+    else {
       this.sht = {
         tree: [],
         curPathPos: 0,
