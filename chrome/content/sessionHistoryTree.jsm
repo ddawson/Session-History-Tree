@@ -154,11 +154,18 @@ function SHistoryHandler (aTab, aBrowser) {
   this.restorePhase = false;
   this._initTreeFromSessionStore();
   this.registerSelf();
+  aBrowser.webProgress.addProgressListener(
+    this,
+    Ci.nsIWebProgress.NOTIFY_STATE_DOCUMENT
+      | Ci.nsIWebProgress.NOTIFY_LOCATION);
+  this.request = null;
+  this.stopped = false;
 }
 
 SHistoryHandler.prototype = {
   QueryInterface: XPCOMUtils.generateQI([
-    Ci.nsISHistoryListener, Ci.nsISupports, Ci.nsISupportsWeakReference]),
+    Ci.nsISHistoryListener, Ci.nsIWebProgressListener,
+    Ci.nsISupports, Ci.nsISupportsWeakReference]),
 
   registerSelf: function () {
     var sHist = this.browser.sessionHistory;
@@ -407,6 +414,10 @@ SHistoryHandler.prototype = {
     var tab = this.tab, sht = this.sht;
     var domWin = this.browser.contentWindow;
 
+    this.browser.removeEventListener("DOMContentLoaded", this._dclHandler,
+                                     false);
+    if (this.stopped) return;
+
     domWin.addEventListener(
       "load",
       function __wlHandler () {
@@ -417,8 +428,25 @@ SHistoryHandler.prototype = {
         domWin.removeEventListener("load", __wlHandler, false);
       },
       false);
+  },
 
-    this.browser.removeEventListener("DOMContentLoaded", this._dclHandler, false);
+  onLocationChange: function (aWebProgress, aRequest, aLocation) {
+    log("LocationChange (" + aRequest.name + "): " + aLocation.spec);
+    this.request = aRequest;
+    this.stopped = false;
+  },
+
+  onStateChange: function (aWebProgress, aRequest, aStateFlags, aStatus) {
+    // 0x804b0002
+    log("StateChange (" + aRequest.name + "): "
+        + aStateFlags + ", " + aStatus);
+    if (aStateFlags & Ci.nsIWebProgressListener.STATE_STOP) {
+      this.request = null;
+      if (aStatus == 0x804b0002) {  // Is that value documented anywhere?
+        log("stopped");
+        this.stopped = true;
+      }
+    }
   },
 };
 
