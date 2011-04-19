@@ -29,6 +29,8 @@
       <preference id="pref_branchlimit"
                   name="extensions.sessionhistorytree.branchlimit"
                   type="int"/>
+      <preference id="pref_log" name="extensions.sessionhistorytree.log"
+                  type="bool"/>
     </preferences>
     <hbox>
       <label control="branchlimit_txt" value="&branchlimit.label;"
@@ -37,5 +39,6 @@
                min="1" size="3" tooltiptext="&branchlimit.tooltip;"
                preference="pref_branchlimit"/>
     </hbox>
+    <checkbox label="&enable_logging.label;" preference="pref_log"/>
   </prefpane>
 </prefwindow>

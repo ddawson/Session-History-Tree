@@ -45,7 +45,8 @@ XPCOMUtils.defineLazyGetter(
     createBundle("chrome://sessionhistorytree/locale/sht.properties"));
 
 function log (aMsg) {
-  consoleSvc.logStringMessage("Session History Tree: " + aMsg);
+  if (prefs.getBoolPref("log"))
+    consoleSvc.logStringMessage("Session History Tree: " + aMsg);
 }
 
 function thisWrap (func, thisObj)
