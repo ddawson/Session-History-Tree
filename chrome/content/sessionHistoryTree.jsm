@@ -194,12 +194,19 @@ SHistoryHandler.prototype = {
   },
 
   clearTree: function () {
-    var res = promptSvc.confirmEx(
-      this.browser.contentWindow,
-      strings.GetStringFromName("clearingtree_title"),
-      strings.GetStringFromName("clearingtree_label"),
-      promptSvc.STD_YES_NO_BUTTONS, null, null, null, null, {});
-    if (res != 0) return;
+    if (prefs.getBoolPref("promptonclear")) {
+      let res = promptSvc.confirmEx(
+        this.browser.contentWindow,
+        strings.GetStringFromName("clearingtree_title"),
+        strings.GetStringFromName("clearingtree_label"),
+        promptSvc.BUTTON_POS_1_DEFAULT + promptSvc.STD_YES_NO_BUTTONS
+        + promptSvc.BUTTON_TITLE_IS_STRING*promptSvc.BUTTON_POS_2, null,
+          null, strings.GetStringFromName("clearingtree_always"), null, {});
+
+      if (res == 1) return;
+      if (res == 2)
+        prefs.setBoolPref("promptonclear", false);
+    }
 
     this._initTreeFromSessionStore();
     log("tree cleared");

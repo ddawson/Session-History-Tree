@@ -17,4 +17,4 @@
 -->
 
 <!ENTITY clear_sessionhistorytree.label "Clear session history tree">
-<!ENTITY clear_sessionhistorytree.tooltip "Clear all tree data, leaving only the current path">
+<!ENTITY clear_sessionhistorytree.tooltip "Clear all tree data for this tab, leaving only the current path">

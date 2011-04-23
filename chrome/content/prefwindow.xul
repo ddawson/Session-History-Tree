@@ -29,6 +29,9 @@
       <preference id="pref_branchlimit"
                   name="extensions.sessionhistorytree.branchlimit"
                   type="int"/>
+      <preference id="pref_promptonclear"
+                  name="extensions.sessionhistorytree.promptonclear"
+                  type="bool"/>
       <preference id="pref_log" name="extensions.sessionhistorytree.log"
                   type="bool"/>
     </preferences>
@@ -39,6 +42,7 @@
                min="1" size="3" tooltiptext="&branchlimit.tooltip;"
                preference="pref_branchlimit"/>
     </hbox>
+    <checkbox label="&promptonclear.label;" preference="pref_promptonclear"/>
     <checkbox label="&enable_logging.label;" preference="pref_log"/>
   </prefpane>
 </prefwindow>

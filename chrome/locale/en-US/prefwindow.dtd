@@ -19,4 +19,5 @@
 <!ENTITY sessionhistorytree_prefs.title "Session History Tree preferences">
 <!ENTITY branchlimit.label "Branch limit">
 <!ENTITY branchlimit.tooltip "The maximum number of branches from each page in the history to keep (the least-recently visited branch is discarded after this is reached)">
+<!ENTITY promptonclear.label "Prompt before clearing tree data">
 <!ENTITY enable_logging.label "Enable logging">
