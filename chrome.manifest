@@ -9,6 +9,10 @@ skin		sessionhistorytree	default	chrome/skin/
 
 # Locales
 locale		sessionhistorytree	en-US	chrome/locale/en-US/
+locale		sessionhistorytree	hu-HU	chrome/locale/hu-HU/
+locale		sessionhistorytree	sr	chrome/locale/sr/
+locale		sessionhistorytree	sv-SE	chrome/locale/sv-SE/
+locale		sessionhistorytree	zh-CN	chrome/locale/zh-CN/
 
 # Overlays
 overlay	chrome://browser/content/browser.xul chrome://sessionhistorytree/content/browserOverlay.xul

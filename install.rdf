@@ -5,7 +5,7 @@
     <id>sessionhistorytree@daniel.dawson</id>
     <type>2</type>
     <name>Session History Tree</name>
-    <version>0.2a2</version>
+    <version>0.2b1</version>
     <creator>Daniel Dawson &lt;ddawson@icehouse.net&gt;</creator>
     <description>Turns session history into a browsable tree.</description>
     <optionsURL>chrome://sessionhistorytree/content/prefwindow.xul</optionsURL>
@@ -19,5 +19,21 @@
         <maxVersion>6.0a1</maxVersion>
       </RDF:Description>
     </targetApplication>
+
+    <translator>hu-HU: Mikes Kaszmán István "Cashman" (BabelZilla)</translator>
+    <translator>sr: DakSrbija (BabelZilla)</translator>
+    <translator>sv-SE: Mikael Hiort af Ornäs "Lakrits" (BabelZilla)</translator>
+    <translator>zh-CN: yfdyh000 &lt;yfdyh000@gmail.com&gt; (BabelZilla)</transltor>
+
+    <localized>
+      <RDF:Description>
+        <locale>sr</locale>
+        <description>Претвара историју сесије у стабло које можете прегледати.</description>
+        <translator>hu-HU: Mikes Kaszmán István "Cashman" (BabelZilla)</translator>
+        <translator>sr: ДакСРБИЈА (BabelZilla)</translator>
+        <translator>sv-SE: Mikael Hiort af Ornäs "Lakrits" (BabelZilla)</translator>
+        <translator>zh-CN: yfdyh000 &lt;yfdyh000@gmail.com&gt; (BabelZilla)</transltor>
+      </RDF:Description>
+    </localized>
   </RDF:Description>
 </RDF:RDF>
