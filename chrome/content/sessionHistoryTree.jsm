@@ -415,6 +415,13 @@ SHistoryHandler.prototype = {
   _dclHandler: function (curIndex, updateNode) {
     log("DOMContentLoaded");
     var entry = JSON.parse(sStore.getTabState(this.tab)).entries[curIndex+1];
+
+    // Prevent recursion, as with about:sessionrestore
+    if (entry.url.substring(0, 6)) {
+      if (entry.hasOwnProperty("formdata"))
+        delete entry.formdata;
+    }
+
     updateNode.entry = entry;
     sStore.setTabValue(this.tab, "sessionHistoryTree",
                        JSON.stringify(this.sht));
@@ -432,6 +439,13 @@ SHistoryHandler.prototype = {
         log("load");
         var entry = JSON.parse(sStore.getTabState(tab)).entries[curIndex+1];
         updateNode.entry = entry;
+
+        // Prevent recursion, as with about:sessionrestore
+        if (entry.url.substring(0, 6)) {
+          if (entry.hasOwnProperty("formdata"))
+            delete entry.formdata;
+        }
+
         sStore.setTabValue(tab, "sessionHistoryTree", JSON.stringify(sht));
         domWin.removeEventListener("load", __wlHandler, false);
       },
