@@ -5,7 +5,7 @@
     <id>sessionhistorytree@daniel.dawson</id>
     <type>2</type>
     <name>Session History Tree</name>
-    <version>0.3b1</version>
+    <version>0.3b2</version>
     <creator>Daniel Dawson &lt;ddawson@icehouse.net&gt;</creator>
     <description>Turns session history into a browsable tree.</description>
     <optionsURL>chrome://sessionhistorytree/content/prefwindow.xul</optionsURL>
@@ -21,6 +21,7 @@
     </targetApplication>
 
     <translator>hu-HU: MIKES KASZMÁN István "Cashman" (BabelZilla)</translator>
+    <translator>pt-BR: Gutierrez PS "gutierrez" (BabelZilla)</translator>
     <translator>sr: DakSrbija (BabelZilla)</translator>
     <translator>sv-SE: Mikael Hiort af Ornäs "Lakrits" (BabelZilla)</translator>
     <translator>zh-CN: yfdyh000 &lt;yfdyh000@gmail.com&gt; (BabelZilla)</translator>
@@ -30,7 +31,18 @@
         <locale>sr</locale>
         <description>Претвара историју сесије у стабло које можете прегледати.</description>
         <translator>hu-HU: Mikes Kaszmán István "Cashman" (BabelZilla)</translator>
+        <translator>pt-BR: Gutierrez PS "gutierrez" (BabelZilla)</translator>
         <translator>sr: ДакСРБИЈА (BabelZilla)</translator>
+        <translator>sv-SE: Mikael Hiort af Ornäs "Lakrits" (BabelZilla)</translator>
+        <translator>zh-CN: yfdyh000 &lt;yfdyh000@gmail.com&gt; (BabelZilla)</translator>
+      </RDF:Description>
+
+      <RDF:Description>
+        <locale>sv-SE</locale>
+        <description>Visar sessionshistoriken i ett bläddringsbart träd.</description>
+        <translator>hu-HU: MIKES KASZMÁN István "Cashman" (BabelZilla)</translator>
+        <translator>pt-BR: Gutierrez PS "gutierrez" (BabelZilla)</translator>
+        <translator>sr: DakSrbija (BabelZilla)</translator>
         <translator>sv-SE: Mikael Hiort af Ornäs "Lakrits" (BabelZilla)</translator>
         <translator>zh-CN: yfdyh000 &lt;yfdyh000@gmail.com&gt; (BabelZilla)</translator>
       </RDF:Description>

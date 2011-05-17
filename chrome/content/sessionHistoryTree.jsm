@@ -544,9 +544,9 @@ function fillTreeSubmenu (evt) {
   var popupPathStr = popup.getAttribute("shtpath");
 
   if (popupPathStr == "")
-    popupPath = [];
+    var popupPath = [];
   else
-    popupPath = popupPathStr.split(",");
+    var popupPath = popupPathStr.split(",");
 
   var document = popup.ownerDocument, window = document.defaultView,
       tab = window.gBrowser.selectedTab,
