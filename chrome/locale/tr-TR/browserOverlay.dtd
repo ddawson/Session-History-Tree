@@ -1,4 +1,4 @@
-/*
+<!--
     Session History Tree, extension for Firefox 4.0+
     Copyright (C) 2011  Daniel Dawson <ddawson@icehouse.net>
 
@@ -14,29 +14,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
 
-@namespace
-  url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
-
-.sessionhistorytree-item > .menu-accel-container {
-  display: none;
-}
-
-.sessionhistorytree-submenu {
-  list-style-image: url("chrome://sessionhistorytree/skin/tree16.png");
-}
-
-.sessionhistorytree-submenu >
-    :-moz-any(.menu-iconic-text, .menu-accel-container) {
-  display: none;
-}
-
-.sessionhistorytree-submenu > .menu-right {
-  -moz-margin-start: 0px;
-  -moz-margin-end: 0px;
-}
-
-#clear-sessionhistorytree-menuitem {
-  list-style-image: url("chrome://sessionhistorytree/skin/treex16.png");
-}
+-->
+<!ENTITY clear_sessionhistorytree.label "Oturum geçmişi ağacını temizle">
+<!ENTITY clear_sessionhistorytree.tooltip "Sekme için tüm ağaç verilerini temizle,sadece şuanki yol kalsın">

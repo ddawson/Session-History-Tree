@@ -25,17 +25,18 @@
   <commandset>
     <command id="clear-sessionhistorytree"
              label="&clear_sessionhistorytree.label;"
-             tooltiptext="&clear_sessionhistorytree.tooltip;"
              oncommand="sessionHistoryTree.clearTree(window);"/>
   </commandset>
   <menupopup id="menu_ToolsPopup">
     <menuitem id="clear-sessionhistorytree-menuitem"
               class="menuitem-iconic"
+              tooltiptext="&clear_sessionhistorytree.tooltip;"
               command="clear-sessionhistorytree"/>
   </menupopup>
   <toolbarpalette id="BrowserToolbarPalette">
     <toolbarbutton id="clear-sessionhistorytree-button"
                    class="toolbarbutton-1 chromeclass-toolbar-additional"
+                   tooltiptext="&clear_sessionhistorytree.tooltip;"
                    command="clear-sessionhistorytree"/>
   </toolbarpalette>
 </overlay>

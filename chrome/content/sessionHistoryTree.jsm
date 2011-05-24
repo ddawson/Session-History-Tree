@@ -478,36 +478,31 @@ function getSHTFillHistoryMenu (aOldFHM)
     var res = aOldFHM(aParent);
     if (!res) return false;
 
+    var children = aParent.childNodes;
+    for (let i = children.length - 1; i >= 0; i--) {
+      if (children[i].tagName == "hbox")
+        aParent.removeChild(children[i]);
+    }
+
     var document = aParent.ownerDocument;
     var tab = document.defaultView.gBrowser.selectedTab;
-    var grid = aParent.firstChild;
-    if (grid && grid.tagName == "grid")
-      aParent.removeChild(grid);
-    grid = document.createElement("grid");
-    var cols = document.createElement("columns");
-    var col = document.createElement("column");
-    col.setAttribute("flex", "1");
-    cols.appendChild(col);
-    col = document.createElement("column");
-    cols.appendChild(col);
-    grid.appendChild(cols);
-
-    var rows = document.createElement("rows");
 
     var pathLen = aParent.firstChild.getAttribute("index");
     var path = [];
     for (var i = 0; i <= pathLen; i++) path.push(0);
     var multis = getSHTPathMultis(tab, pathLen);
 
-    while (aParent.hasChildNodes()) {
-      let row = document.createElement("row");
-      let item = aParent.firstChild;
+    for (let i = 0; i < children.length; i++) {
+      let item = children[i];
+      item.className += " sessionhistorytree-item";
+      item.setAttribute("flex", "1");
       item.setAttribute("shtpath", path.toString());
       path.pop();
-      aParent.removeChild(item);
-      row.appendChild(item);
 
       if (multis.pop()) {
+        let hbox = document.createElement("hbox");
+        aParent.replaceChild(hbox, item);
+        hbox.appendChild(item);
         let sm = document.createElement("menu");
         sm.className = "menu-iconic sessionhistorytree-submenu";
         let smPopup = document.createElement("menupopup");
@@ -515,12 +510,9 @@ function getSHTFillHistoryMenu (aOldFHM)
         smPopup.addEventListener("popupshowing", fillTreeSubmenu, false);
         smPopup.addEventListener("command", switchPath, false);
         sm.appendChild(smPopup);
-        row.appendChild(sm);
+        hbox.appendChild(sm);
       }
-      rows.appendChild(row);
     }
-    grid.appendChild(rows);
-    aParent.appendChild(grid);
 
     return true;
   };
@@ -570,17 +562,6 @@ function fillTreeSubmenu (evt) {
   while (popup.hasChildNodes())
     popup.removeChild(popup.lastChild);
 
-  var grid = document.createElement("grid");
-  var cols = document.createElement("columns");
-  var col = document.createElement("column");
-  col.setAttribute("flex", "1");
-  cols.appendChild(col);
-  col = document.createElement("column");
-  cols.appendChild(col);
-  grid.appendChild(cols);
-
-  var rows = document.createElement("rows");
-
   var lastIdx;
   if (isCurPath)
     lastIdx = 0;
@@ -598,20 +579,22 @@ function fillTreeSubmenu (evt) {
     } else
       entry = node.entry;
 
-    let row = document.createElement("row");
     let item = document.createElement("menuitem");
+    popup.appendChild(item);
     item.setAttribute("label", entry.title || entry.url);
     item.setAttribute("uri", entry.url);
     item.setAttribute("tooltiptext",
                       strings.GetStringFromName("switchpath_tooltip"));
     let itemPath = popupPath.concat(i);
+    item.className = "sessionhistorytree-item";
+    item.setAttribute("flex", "1");
     item.setAttribute("shtpath", itemPath.toString());
 
     if (isCurPath && i == lastIdx) {
       item.setAttribute("type", "radio");
       item.setAttribute("checked", "true");
     } else {
-      item.className = "menuitem-iconic";
+      item.className += " menuitem-iconic";
       let uri = ioSvc.newURI(entry.url, null, null);
 
       try {
@@ -619,21 +602,20 @@ function fillTreeSubmenu (evt) {
         item.style.listStyleImage = "url(" + iconURL + ")";
       } catch (e) {}
     }
-    row.appendChild(item);
 
     if (node.subtree.length > 0) {
+      let hbox = document.createElement("hbox");
+      popup.replaceChild(hbox, item);
+      hbox.appendChild(item);
       let sm = document.createElement("menu");
       sm.className = "menu-iconic sessionhistorytree-submenu";
       let smPopup = document.createElement("menupopup");
       smPopup.setAttribute("shtpath", itemPath.toString());
       smPopup.addEventListener("popupshowing", fillTreeSubmenu, false);
       sm.appendChild(smPopup);
-      row.appendChild(sm);
+      hbox.appendChild(sm);
     }
-    rows.appendChild(row);
   }
-  grid.appendChild(rows);
-  popup.appendChild(grid);
 
   evt.stopPropagation();
 }
