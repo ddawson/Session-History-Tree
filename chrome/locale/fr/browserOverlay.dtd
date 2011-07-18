@@ -1,0 +1,2 @@
+<!ENTITY clear_sessionhistorytree.label "Effacer l'arborescence de l'historique de session">
+<!ENTITY clear_sessionhistorytree.tooltip "Effacer toutes les données d’arborescence de cet onglet, hormis le chemin actuel">

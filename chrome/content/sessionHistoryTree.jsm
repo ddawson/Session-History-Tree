@@ -243,12 +243,10 @@ SHistoryHandler.prototype = {
     var tabSt = JSON.parse(sStore.getTabState(this.tab));
 
     this.sht.curPathPos = tabSt.index;
-    var curTree = this.sht.tree;
-    var curNode, curEntry;
+    var curTree = this.sht.tree, curNode;
 
     for (var i = 0; i < this.sht.curPathPos; i++) {
       curNode = curTree[0];
-      curEntry = curNode.entry;
       curTree = curNode.subtree;
     }
 
@@ -267,12 +265,10 @@ SHistoryHandler.prototype = {
     var tabSt = JSON.parse(sStore.getTabState(this.tab));
 
     this.sht.curPathPos = tabSt.index;
-    var curTree = this.sht.tree;
-    var curNode, curEntry;
+    var curTree = this.sht.tree, curNode;
 
     for (var i = 0; i < this.sht.curPathPos; i++) {
       curNode = curTree[0];
-      curEntry = curNode.entry;
       curTree = curNode.subtree;
     }
 
@@ -291,12 +287,10 @@ SHistoryHandler.prototype = {
     var tabSt = JSON.parse(sStore.getTabState(this.tab));
 
     this.sht.curPathPos = tabSt.index;
-    var curTree = this.sht.tree;
-    var curNode, curEntry;
+    var curTree = this.sht.tree, curNode;
 
     for (var i = 0; i < this.sht.curPathPos; i++) {
       curNode = curTree[0];
-      curEntry = curNode.entry;
       curTree = curNode.subtree;
     }
 
@@ -315,12 +309,10 @@ SHistoryHandler.prototype = {
     if (this.restorePhase) return true;
 
     this.sht.curPathPos = tabSt.index;
-    var curTree = this.sht.tree;
-    var curNode = null, curEntry = null;
+    var curTree = this.sht.tree, curNode = null;
 
     for (var i = 0; i < this.sht.curPathPos; i++) {
       curNode = curTree[0];
-      curEntry = curNode.entry;
       curTree = curNode.subtree;
     }
 
@@ -353,7 +345,7 @@ SHistoryHandler.prototype = {
     this.browser.addEventListener(
       "DOMContentLoaded",
       function __dclHandler () {
-        thisObj._dclHandler(curIndex, newNode);
+        thisObj._dclHandler(curIndex + 1, newNode);
         thisObj.browser.removeEventListener(
           "DOMContentLoaded", __dclHandler, false)
       },
@@ -385,12 +377,10 @@ SHistoryHandler.prototype = {
 
     var tabSt = JSON.parse(sStore.getTabState(this.tab));
     this.sht.curPathPos = tabSt.index;
-    var curTree = this.sht.tree;
-    var curNode = null, curEntry = null;
+    var curTree = this.sht.tree, curNode = null;
 
     for (var i = 0; i < this.sht.curPathPos; i++) {
       curNode = curTree[0];
-      curEntry = curNode.entry;
       curTree = curNode.subtree;
     }
 
@@ -414,7 +404,7 @@ SHistoryHandler.prototype = {
 
   _dclHandler: function (curIndex, updateNode) {
     log("DOMContentLoaded");
-    var entry = JSON.parse(sStore.getTabState(this.tab)).entries[curIndex+1];
+    var entry = JSON.parse(sStore.getTabState(this.tab)).entries[curIndex];
 
     // Prevent recursion, as with about:sessionrestore
     if (entry.url.substring(0, 6)) {
@@ -437,7 +427,7 @@ SHistoryHandler.prototype = {
       "load",
       function __wlHandler () {
         log("load");
-        var entry = JSON.parse(sStore.getTabState(tab)).entries[curIndex+1];
+        var entry = JSON.parse(sStore.getTabState(tab)).entries[curIndex];
         updateNode.entry = entry;
 
         // Prevent recursion, as with about:sessionrestore
