@@ -19,6 +19,14 @@
 @namespace
   url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
+#toggle-sessionhistorytree-sidebar-button {
+  list-style-image: url("chrome://sessionhistorytree/skin/tree24.png");
+}
+
+toolbar[iconsize="small"] #toggle-sessionhistorytree-sidebar-button {
+  list-style-image: url("chrome://sessionhistorytree/skin/tree16.png");
+}
+
 #clear-sessionhistorytree-button {
   list-style-image: url("chrome://sessionhistorytree/skin/treex24.png");
 }

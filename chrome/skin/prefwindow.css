@@ -19,12 +19,16 @@
 @namespace
   url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
-#clear-sessionhistorytree-button {
-  list-style-image: url("chrome://sessionhistorytree/skin/treex15-18.png");
+#sidebar-shortcut-keypressrecv {
+  -moz-appearance: none;
+  border-style: none;
+  margin: 0px;
+  width: 0px;
+  min-width: 0px;
 }
 
-#clear-sessionhistorytree-button > .toolbarbutton-icon {
-  margin: 0px !important;
-  width: auto !important;
-  height: auto !important;
+#sidebar-shortcut-keypressrecv * {
+  border-style: none;
+  margin: 0px;
+  width: 0px;
 }

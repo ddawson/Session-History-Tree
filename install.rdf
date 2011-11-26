@@ -5,53 +5,17 @@
     <id>sessionhistorytree@daniel.dawson</id>
     <type>2</type>
     <name>Session History Tree</name>
-    <version>1.0</version>
+    <version>2.0b1</version>
     <creator>Daniel Dawson &lt;ddawson@icehouse.net&gt;</creator>
     <description>Turns session history into a browsable tree.</description>
     <optionsURL>chrome://sessionhistorytree/content/prefwindow.xul</optionsURL>
-    <iconURL>chrome://sessionhistorytree/skin/tree48.png</iconURL>
-    <icon64URL>chrome://sessionhistorytree/skin/tree64.png</icon64URL>
 
     <targetApplication>
       <RDF:Description>
         <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id> <!-- Firefox -->
         <minVersion>4.0</minVersion>
-        <maxVersion>8.0a1</maxVersion>
+        <maxVersion>11.0a1</maxVersion>
       </RDF:Description>
     </targetApplication>
-
-    <translator>fr: Matthieu Martin http://matthieu-martin.com/ (BabelZilla)</translator>
-    <translator>hu-HU: MIKES KASZMÁN István "Cashman" (BabelZilla)</translator>
-    <translator>pt-BR: Gutierrez PS "gutierrez" (BabelZilla)</translator>
-    <translator>sr: DakSrbija (BabelZilla)</translator>
-    <translator>sv-SE: Mikael Hiort af Ornäs "Lakrits" (BabelZilla)</translator>
-    <translator>tr-TR: nikneyim (BabelZilla)</translator>
-    <translator>zh-CN: yfdyh000 &lt;yfdyh000@gmail.com&gt; (BabelZilla)</translator>
-
-    <localized>
-      <RDF:Description>
-        <locale>sr</locale>
-        <description>Претвара историју сесије у стабло које можете прегледати.</description>
-        <translator>fr: Matthieu Martin http://matthieu-martin.com/ (BabelZilla)</translator>
-        <translator>hu-HU: Mikes Kaszmán István "Cashman" (BabelZilla)</translator>
-        <translator>pt-BR: Gutierrez PS "gutierrez" (BabelZilla)</translator>
-        <translator>sr: ДакСРБИЈА (BabelZilla)</translator>
-        <translator>tr-TR: nikneyim (BabelZilla)</translator>
-        <translator>sv-SE: Mikael Hiort af Ornäs "Lakrits" (BabelZilla)</translator>
-        <translator>zh-CN: yfdyh000 &lt;yfdyh000@gmail.com&gt; (BabelZilla)</translator>
-      </RDF:Description>
-
-      <RDF:Description>
-        <locale>sv-SE</locale>
-        <description>Visar sessionshistoriken i ett bläddringsbart träd.</description>
-        <translator>fr: Matthieu Martin http://matthieu-martin.com/ (BabelZilla)</translator>
-        <translator>hu-HU: MIKES KASZMÁN István "Cashman" (BabelZilla)</translator>
-        <translator>pt-BR: Gutierrez PS "gutierrez" (BabelZilla)</translator>
-        <translator>sr: DakSrbija (BabelZilla)</translator>
-        <translator>sv-SE: Mikael Hiort af Ornäs "Lakrits" (BabelZilla)</translator>
-        <translator>tr-TR: nikneyim (BabelZilla)</translator>
-        <translator>zh-CN: yfdyh000 &lt;yfdyh000@gmail.com&gt; (BabelZilla)</translator>
-      </RDF:Description>
-    </localized>
   </RDF:Description>
 </RDF:RDF>

@@ -1,2 +1,6 @@
+<!ENTITY sessionhistorytree.title "Session History Tree">
+<!-- Used in the View > Sidebar menu -->
+<!ENTITY sessionhistorytree.accesskey "T">
+<!ENTITY toggle_sessionhistorytree.tooltip "Open the Session History Tree navigation sidebar">
 <!ENTITY clear_sessionhistorytree.label "Clear session history tree">
 <!ENTITY clear_sessionhistorytree.tooltip "Clear all tree data for this tab, leaving only the current path">

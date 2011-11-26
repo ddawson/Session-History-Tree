@@ -1,5 +1,32 @@
 <!ENTITY sessionhistorytree_prefs.title "Session History Tree preferences">
+<!ENTITY sidebar.caption "Sidebar">
+<!ENTITY sidebar_shortcut.label "Keyboard shortcut">
+<!ENTITY sidebar_shortcut.accesskey "K">
+<!ENTITY sidebar_shortcut.tooltip "Key combination to press to open/close the sidebar">
+<!ENTITY sidebar_shortcut_modifiers.tooltip "Key modifiers that must be held when pressing the main key (comma- or space-separated list from the following: shift alt meta control). The use of &quot;shift&quot; must match the requirements of your keyboard.">
+<!ENTITY sidebar_shortcut_key.tooltip "The main key of the combination. Must match the use of &quot;shift&quot; in the modifiers.">
+<!ENTITY captureshortcut.label "Capture">
+<!ENTITY captureshortcut.accesskey "C">
+<!ENTITY captureshortcut.tooltip "Click to capture a key combination from your keyboard">
+<!ENTITY entershortcut.label "Please press your desired key combination now.">
+<!ENTITY middleclickmode.label "Action on middle-click or Ctrl+click">
+<!ENTITY middleclickmode_openintab.label "Open page in new tab">
+<!ENTITY middleclickmode_openintab.accesskey "O">
+<!ENTITY middleclickmode_cloneintab.label "Clone subtree in new tab">
+<!ENTITY middleclickmode_cloneintab.accesskey "l">
+<!ENTITY middleclickmode_detachintab.label "Detach subtree in new tab">
+<!ENTITY middleclickmode_detachintab.accesskey "e">
+<!ENTITY sidebaranimations.label "Show animations">
+<!ENTITY sidebaranimations.accesskey "S">
+<!ENTITY sidebaranimations.tooltip "Whether animations (e.g. sliding when moving around in the tree) should be used">
 <!ENTITY branchlimit.label "Branch limit">
+<!ENTITY branchlimit.accesskey "B">
 <!ENTITY branchlimit.tooltip "The maximum number of branches from each page in the history to keep (the least-recently visited branch is discarded after this is reached)">
 <!ENTITY promptonclear.label "Prompt before clearing tree data">
-<!ENTITY enable_logging.label "Enable logging">
+<!ENTITY promptonclear.accesskey "P">
+<!ENTITY promptondeletesubtree.label "Prompt before removing subtrees">
+<!ENTITY promptondeletesubtree.accesskey "r">
+<!ENTITY enable_debugging.label "Enable debugging output in console">
+<!ENTITY enable_debugging.accesskey "d">
+<!ENTITY augment_backforward_menu.label "Augment back/forward context menu">
+<!ENTITY augment_backforward_menu.accesskey "A">

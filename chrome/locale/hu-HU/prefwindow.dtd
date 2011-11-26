@@ -1,5 +1,0 @@
-<!ENTITY sessionhistorytree_prefs.title "Munkamenet előzmények fastruktúra beállításai">
-<!ENTITY branchlimit.label "Ág határérték">
-<!ENTITY branchlimit.tooltip "Egy oldalhoz tartozó megjegyezendő ágak száma (a korábbi mindig felülírásra kerül)">
-<!ENTITY promptonclear.label "Rákérdezés a fastruktúra adatainak törlése előtt">
-<!ENTITY enable_logging.label "Naplózás engedélyezése">

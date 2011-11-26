@@ -1,0 +1,22 @@
+<!ENTITY refresh.label "Refresh">
+<!-- Warning: this can override accesskeys in the main browser window. -->
+<!ENTITY refresh.accesskey "R">
+<!ENTITY refresh.tooltip "Refresh the tree display">
+<!ENTITY navigation_instructions.label "Use the arrow keys to move around the tree: up and down move forward and back, while left and right move between alternative pages. Press Enter to visit the selected page. You may also use the mouse: click on a node to visit, and click on either side to move between alternative pages. Right-click or press Menu for more options.">
+
+<!-- CONTEXT MENU -->
+<!ENTITY visit_node.label "Visit page">
+<!ENTITY visit_node.accesskey "V">
+<!ENTITY visit_node.tooltip "Visit the selected page, and move it and part of its subtree into the back/forward list">
+<!ENTITY delete_subtree.label "Remove subtree">
+<!ENTITY delete_subtree.accesskey "R">
+<!ENTITY delete_subtree.tooltip "Permanently delete the selected node and all of its descendants in the tree">
+<!ENTITY openintab.label "Open in new tab">
+<!ENTITY openintab.accesskey "O">
+<!ENTITY openintab.tooltip "Open the selected page in a new tab">
+<!ENTITY clonesubtree.label "Clone subtree in new tab">
+<!ENTITY clonesubtree.accesskey "C">
+<!ENTITY clonesubtree.tooltip "Open a new tab containing only the selected node and all of its descendants">
+<!ENTITY detachsubtree.label "Detach subtree in new tab">
+<!ENTITY detachsubtree.accesskey "D">
+<!ENTITY detachsubtree.tooltip "Remove the selected node and all of its descendants from this tab and place them in a separate tab">

@@ -1,5 +1,0 @@
-<!ENTITY sessionhistorytree_prefs.title "Inställningar för Session History Tree">
-<!ENTITY branchlimit.label "Förgreningsgräns">
-<!ENTITY branchlimit.tooltip "Det högsta antalet förgreningar från varje sida i historiken som skall behållas (den tidigast besökta grenen kasseras när detta uppnås)">
-<!ENTITY promptonclear.label "Fråga innan träddata rensas">
-<!ENTITY enable_logging.label "Aktivera loggning">

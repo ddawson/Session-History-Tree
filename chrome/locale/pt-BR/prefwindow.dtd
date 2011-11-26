@@ -1,5 +1,0 @@
-<!ENTITY sessionhistorytree_prefs.title "Preferências do Session History Tree">
-<!ENTITY branchlimit.label "Limite de ramificações">
-<!ENTITY branchlimit.tooltip "O número máximo de ramificações de cada página do histórico a ser mantido (a ramificação mais antiga é descartada após o limite ser atingido)">
-<!ENTITY promptonclear.label "Perguntar antes de limpar os dados da árvore">
-<!ENTITY enable_logging.label "Habilitar registro">

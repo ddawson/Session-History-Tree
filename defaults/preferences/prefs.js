@@ -1,3 +1,10 @@
 pref("extensions.sessionhistorytree.branchlimit", 5);
 pref("extensions.sessionhistorytree.promptonclear", true);
-pref("extensions.sessionhistorytree.log", false);
+pref("extensions.sessionhistorytree.promptondeletesubtree", true);
+pref("extensions.sessionhistorytree.sidebarkey", "");
+pref("extensions.sessionhistorytree.sidebarkeycode", 0);
+pref("extensions.sessionhistorytree.sidebarkeymodifiers", "");
+pref("extensions.sessionhistorytree.middleclickmode", 0);
+pref("extensions.sessionhistorytree.sidebaranimations", true);
+pref("extensions.sessionhistorytree.debug", false);
+pref("extensions.sessionhistorytree.augmentbackforwardmenu", true);

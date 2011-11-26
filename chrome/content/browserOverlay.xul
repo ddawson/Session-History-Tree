@@ -22,18 +22,46 @@
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script type="application/javascript"
           src="chrome://sessionhistorytree/content/browserOverlay.js"/>
+
   <commandset>
     <command id="clear-sessionhistorytree"
              label="&clear_sessionhistorytree.label;"
              oncommand="sessionHistoryTree.clearTree(window);"/>
   </commandset>
+
+  <broadcasterset id="mainBroadcasterSet">
+    <broadcaster
+      id="toggle-sessionhistorytree-sidebar" label="&sessionhistorytree.title;"
+      tooltiptext="&toggle_sessionhistorytree.tooltip;"
+      autoCheck="false" type="checkbox" group="sidebar"
+      sidebarurl="chrome://sessionhistorytree/content/sidebar.xul"
+      sidebartitle="&sessionhistorytree.title;"
+      oncommand="toggleSidebar('toggle-sessionhistorytree-sidebar');"/>
+  </broadcasterset>
+
+  <keyset id="mainKeyset">
+    <key id="toggle-sessionhistorytree-sidebar-key" disabled="true"
+         command="toggle-sessionhistorytree-sidebar" key="" modifiers=""/>
+  </keyset>
+
+  <menupopup id="viewSidebarMenu">
+    <menuitem id="toggle-sessionhistorytree-sidebar-menuitem"
+              key="toggle-sessionhistorytree-sidebar-key"
+              observes="toggle-sessionhistorytree-sidebar"
+              accesskey="&sessionhistorytree.accesskey;"/>
+  </menupopup>
+
   <menupopup id="menu_ToolsPopup">
     <menuitem id="clear-sessionhistorytree-menuitem"
               class="menuitem-iconic"
               tooltiptext="&clear_sessionhistorytree.tooltip;"
               command="clear-sessionhistorytree"/>
   </menupopup>
+
   <toolbarpalette id="BrowserToolbarPalette">
+    <toolbarbutton id="toggle-sessionhistorytree-sidebar-button"
+                   class="toolbarbutton-1 chromeclass-toolbar-additional"
+                   observes="toggle-sessionhistorytree-sidebar"/>
     <toolbarbutton id="clear-sessionhistorytree-button"
                    class="toolbarbutton-1 chromeclass-toolbar-additional"
                    tooltiptext="&clear_sessionhistorytree.tooltip;"

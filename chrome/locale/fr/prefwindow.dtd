@@ -1,5 +1,0 @@
-<!ENTITY sessionhistorytree_prefs.title "Préférences de Session History Tree">
-<!ENTITY branchlimit.label "Limite de la branche">
-<!ENTITY branchlimit.tooltip "Le nombre maximum de branches à conserver pour chaque page de l'historique (la branche la moins-récemment visitée n'est pas conservée après cette limite)">
-<!ENTITY promptonclear.label "Me demander confirmation avant d'effacer les données d'arborescence">
-<!ENTITY enable_logging.label "Activer la journalisation">

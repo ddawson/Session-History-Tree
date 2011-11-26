@@ -1,5 +1,0 @@
-<!ENTITY sessionhistorytree_prefs.title "Session History Tree terchleri">
-<!ENTITY branchlimit.label "Dal limiti">
-<!ENTITY branchlimit.tooltip "Her sayfa için en fazla geçmişi tutulacak rakam (son-en son ziyaret edilen dal bu limit aşılınca kayıttan atılır)">
-<!ENTITY promptonclear.label "Ağaç verilerini silmeden önce sor">
-<!ENTITY enable_logging.label "Kayıtı etkinleştir">

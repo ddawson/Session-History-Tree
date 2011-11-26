@@ -1,5 +1,0 @@
-<!ENTITY sessionhistorytree_prefs.title "Session History Tree 首选项">
-<!ENTITY branchlimit.label "分支限制">
-<!ENTITY branchlimit.tooltip "历史纪录中每页保留的分支最大数量（达到此限制后，最近最少访问的分支将被丢弃）">
-<!ENTITY promptonclear.label "清除树状数据前提示">
-<!ENTITY enable_logging.label "启用日志记录">

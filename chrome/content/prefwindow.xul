@@ -18,6 +18,8 @@
 -->
 
 <?xml-stylesheet type="text/css" href="chrome://global/skin/"?>
+<?xml-stylesheet type="text/css"
+                 href="chrome://sessionhistorytree/skin/prefwindow.css"?>
 <!DOCTYPE prefwindow SYSTEM
           "chrome://sessionhistorytree/locale/prefwindow.dtd">
 <prefwindow
@@ -26,23 +28,96 @@
     title="&sessionhistorytree_prefs.title;">
   <prefpane>
     <preferences>
+      <preference id="pref_sidebarshortcut_modifiers"
+                  name="extensions.sessionhistorytree.sidebarkeymodifiers"
+                  type="string"/>
+      <preference id="pref_sidebarshortcut_key"
+                  name="extensions.sessionhistorytree.sidebarkey"
+                  type="string"/>
+      <preference id="pref_sidebarshortcut_keycode"
+                  name="extensions.sessionhistorytree.sidebarkeycode"
+                  type="int"/>
+      <preference id="pref_middleclickmode"
+                  name="extensions.sessionhistorytree.middleclickmode"
+                  type="int"/>
+      <preference id="pref_sidebaranimations"
+                  name="extensions.sessionhistorytree.sidebaranimations"
+                  type="bool"/>
       <preference id="pref_branchlimit"
                   name="extensions.sessionhistorytree.branchlimit"
                   type="int"/>
       <preference id="pref_promptonclear"
                   name="extensions.sessionhistorytree.promptonclear"
                   type="bool"/>
-      <preference id="pref_log" name="extensions.sessionhistorytree.log"
+      <preference id="pref_promptondeletesubtree"
+                  name="extensions.sessionhistorytree.promptondeletesubtree"
+                  type="bool"/>
+      <preference id="pref_debug" name="extensions.sessionhistorytree.debug"
+                  type="bool"/>
+      <preference id="pref_augment_backforward_menu"
+                  name="extensions.sessionhistorytree.augmentbackforwardmenu"
                   type="bool"/>
     </preferences>
+    <groupbox>
+      <caption label="&sidebar.caption;"/>
+      <hbox>
+        <label control="sidebar-shortcut-modifiers"
+               accesskey="&sidebar_shortcut.accesskey;"
+               value="&sidebar_shortcut.label;"
+               tooltiptext="&sidebar_shortcut.tooltip;"/>
+        <textbox id="sidebar-shortcut-modifiers" flex="1"
+                 tooltiptext="&sidebar_shortcut_modifiers.tooltip;"
+                 preference="pref_sidebarshortcut_modifiers"/>
+        <textbox id="sidebar-shortcut-key" size="10"
+                 tooltiptext="&sidebar_shortcut_key.tooltip;"
+                 preference="pref_sidebarshortcut_key"
+                 onsynctopreference="return synctopref();"/>
+        <button id="sidebar-shortcut-capturebtn"
+                label="&captureshortcut.label;"
+                accesskey="&captureshortcut.accesskey;"
+                tooltiptext="&captureshortcut.tooltip;"
+                oncommand="captureshortcut(event);"/>
+        <button id="sidebar-shortcut-keypressrecv" tabindex="-1"/>
+      </hbox>
+      <label id="entershortcut_lbl" value="&entershortcut.label;"/>
+      <groupbox>
+        <caption label="&middleclickmode.label;"/>
+        <radiogroup preference="pref_middleclickmode">
+          <radio label="&middleclickmode_openintab.label;"
+                 accesskey="&middleclickmode_openintab.accesskey;" value="0"/>
+          <radio label="&middleclickmode_cloneintab.label;"
+                 accesskey="&middleclickmode_cloneintab.accesskey;" value="1"/>
+          <radio label="&middleclickmode_detachintab.label;"
+                 accesskey="&middleclickmode_detachintab.accesskey;"
+                 value="2"/>
+        </radiogroup>
+      </groupbox>
+      <checkbox label="&sidebaranimations.label;"
+                accesskey="&sidebaranimations.accesskey;"
+                tooltiptext="&sidebaranimations.tooltip;"
+                preference="pref_sidebaranimations"/>
+    </groupbox>
     <hbox>
       <label control="branchlimit_txt" value="&branchlimit.label;"
              tooltiptext="&branchlimit.tooltip;"/>
-      <textbox id="branchlimit_txt" label="&branchlimit.label;" type="number"
-               min="1" size="3" tooltiptext="&branchlimit.tooltip;"
+      <textbox id="branchlimit_txt" accesskey="&branchlimit.accesskey;"
+               type="number" min="1" size="3"
+               tooltiptext="&branchlimit.tooltip;"
                preference="pref_branchlimit"/>
     </hbox>
-    <checkbox label="&promptonclear.label;" preference="pref_promptonclear"/>
-    <checkbox label="&enable_logging.label;" preference="pref_log"/>
+    <checkbox label="&promptonclear.label;"
+              accesskey="&promptonclear.accesskey;"
+              preference="pref_promptonclear"/>
+    <checkbox label="&promptondeletesubtree.label;"
+              accesskey="&promptondeletesubtree.accesskey;"
+              preference="pref_promptondeletesubtree"/>
+    <checkbox label="&enable_debugging.label;"
+              accesskey="&enable_debugging.accesskey;"
+              preference="pref_debug"/>
+    <checkbox label="&augment_backforward_menu.label;"
+              accesskey="&augment_backforward_menu.accesskey;"
+              preference="pref_augment_backforward_menu"/>
   </prefpane>
+  <script type="application/javascript"
+          src="chrome://sessionhistorytree/content/prefwindow.js"/>
 </prefwindow>

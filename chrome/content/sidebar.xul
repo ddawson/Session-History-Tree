@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Session History Tree, extension for Firefox 4.0+
+    Copyright (C) 2011  Daniel Dawson <ddawson@icehouse.net>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<?xml-stylesheet type="text/css" href="chrome://global/skin/"?>
+<?xml-stylesheet type="text/css" href="chrome://browser/skin/browser.css"?>
+<?xml-stylesheet type="text/css"
+                 href="chrome://sessionhistorytree/skin/sidebar.css"?>
+
+<!DOCTYPE page [
+<!ENTITY % browserOverlayDTD SYSTEM
+  "chrome://sessionhistorytree/locale/browserOverlay.dtd">
+%browserOverlayDTD;
+<!ENTITY % sidebarDTD SYSTEM "chrome://sessionhistorytree/locale/sidebar.dtd">
+%sidebarDTD;
+]>
+
+<page id="sessionHistoryTreeSidebar" title="&sessionhistorytree.title;"
+      xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      onload="navigation.loadHandler();"
+      onunload="navigation.unloadHandler();">
+  <stringbundleset>
+    <stringbundle id="sidebar-strings"
+                  src="chrome://sessionhistorytree/locale/sidebar.properties"/>
+  </stringbundleset>
+
+  <popupset>
+    <menupopup id="node-contextpopup" onpopupshown="navigation.popupShown();"
+               onpopuphidden="navigation.popupHidden();">
+      <menuitem label="&visit_node.label;" accesskey="&visit_node.accesskey;"
+                tooltiptext="&visit_node.tooltip;"
+                oncommand="navigation.visitSelected();" default="true"/>
+      <menuitem label="&delete_subtree.label;"
+                accesskey="&delete_subtree.accesskey;"
+                tooltiptext="&delete_subtree.tooltip;"
+                oncommand="navigation.deleteSelectedSubtree();"/>
+      <menuitem label="&openintab.label;" accesskey="&openintab.accesskey;"
+                tooltiptext="&openintab.tooltip;"
+                oncommand="navigation.openSelectedInTab(false);"/>
+      <menuitem label="&clonesubtree.label;"
+                accesskey="&clonesubtree.accesskey;"
+                tooltiptext="&clonesubtree.tooltip;"
+                oncommand="navigation.cloneSelectedSubtree(false);"/>
+      <menuitem label="&detachsubtree.label;"
+                accesskey="&detachsubtree.accesskey;"
+                tooltiptext="&detachsubtree.tooltip;"
+                oncommand="navigation.detachSelectedSubtree(false);"/>
+    </menupopup>
+  </popupset>
+
+  <vbox id="top-vbox" flex="1">
+    <scrollbox id="navigation-box" orient="vertical">
+      <hbox>
+        <grid id="navigation-top-grid" flex="1">
+          <columns>
+            <column id="top-left-column" class="left-column"/>
+            <column id="top-center-column" class="center-column" flex="1"/>
+            <column id="top-right-column" class="right-column"/>
+          </columns>
+        </grid>
+      </hbox>
+      <button id="sidebar-keypressrecv" context="node-contextpopup"/>
+      <html:div id="bottom-div">
+        <grid id="navigation-bottom-grid" class="navigation-bottom-grid"
+              flex="1" context="node-contextpopup">
+          <columns>
+            <column id="bottom-left-column" class="left-column"/>
+            <column id="bottom-center-column" class="center-column" flex="1"/>
+            <column id="bottom-right-column" class="right-column"/>
+          </columns>
+        </grid>
+      </html:div>
+    </scrollbox>
+    <button label="&refresh.label;" accesskey="&refresh.accesskey;"
+            tooltiptext="&refresh.tooltip;"
+            oncommand="navigation.treeChangeNotify();"/>
+    <label>&navigation_instructions.label;</label>
+  </vbox>
+  <script type="application/javascript"
+          src="chrome://sessionhistorytree/content/sidebar.js"/>
+</page>

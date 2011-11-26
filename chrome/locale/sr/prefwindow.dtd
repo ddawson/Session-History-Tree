@@ -1,5 +1,0 @@
-<!ENTITY sessionhistorytree_prefs.title "Session History Tree - подешавања">
-<!ENTITY branchlimit.label "Ограничење грана">
-<!ENTITY branchlimit.tooltip "Највиши број грана сваке странице који ће се чувати  у историји. Након достизања овог броја, све новије гране ће бити одбачене.">
-<!ENTITY promptonclear.label "Питај ме пре чишћења података о стаблу">
-<!ENTITY enable_logging.label "Омогући вођење евиденције">

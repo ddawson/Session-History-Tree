@@ -1,0 +1,99 @@
+/*
+    Session History Tree, extension for Firefox 4.0+
+    Copyright (C) 2011  Daniel Dawson <ddawson@icehouse.net>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+@namespace "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+@namespace html "http://www.w3.org/1999/xhtml";
+
+#navigation-box {
+  margin-bottom: 8px;
+  height: 200px;
+  overflow-y: auto;
+  background-color: -moz-Field;
+  color: -moz-FieldText;
+}
+
+#bottom-div {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+grid {
+  width: 100%;
+}
+
+.left-column, .right-column {
+  width: 24px;
+}
+
+.center-column {
+  overflow-x: hidden;
+}
+
+.selected-cell {
+  background-color: -moz-CellHighlight;
+  color: -moz-CellHighlightText;
+}
+
+.icon-image {
+  margin-top: 1px;
+  margin-bottom: 1px;
+  margin-left: 4px;
+  margin-right: 4px;
+  width: 16px;
+  min-width: 16px;
+  max-width: 16px;
+  height: 16px;
+  min-height: 16px;
+  max-height: 16px;
+  vertical-align: baseline;
+}
+
+.current-page-label {
+  font-weight: bold;
+}
+
+.navigation-bottom-grid {
+  position: relative;
+  left: 0px;
+}
+
+.shifted {
+  left: 0px;
+}
+
+.slide {
+  -moz-transition-property: left;
+  -moz-transition-duration: 0.15s;
+  -moz-transition-timing-function: ease-out;
+  left: 0px;
+}
+
+#sidebar-keypressrecv {
+  -moz-appearance: none;
+  border-style: none;
+  margin: 0px;
+  height: 0px;
+  min-height: 0px;
+}
+
+#sidebar-keypressrecv * {
+  border-style: none;
+  margin: 0px;
+  height: 0px;
+}
+
