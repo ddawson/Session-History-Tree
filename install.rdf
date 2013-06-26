@@ -5,7 +5,7 @@
     <id>sessionhistorytree@daniel.dawson</id>
     <type>2</type>
     <name>Session History Tree</name>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <creator>Daniel Dawson &lt;ddawson@icehouse.net&gt;</creator>
     <description>Turns session history into a browsable tree.</description>
     <optionsURL>chrome://sessionhistorytree/content/prefwindow.xul</optionsURL>
@@ -15,8 +15,8 @@
     <targetApplication>
       <RDF:Description>
         <id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</id> <!-- Firefox -->
-        <minVersion>4.0</minVersion>
-        <maxVersion>8.0a1</maxVersion>
+        <minVersion>13.0</minVersion>
+        <maxVersion>25.0a1</maxVersion>
       </RDF:Description>
     </targetApplication>
 

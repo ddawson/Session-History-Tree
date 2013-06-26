@@ -1,21 +1,21 @@
 # Modules
-resource	sessionhistorytree	chrome/content/
+resource	sessionhistorytree	content/
 
 # Content
-content		sessionhistorytree	chrome/content/
+content		sessionhistorytree	content/
 
 # Skin
-skin		sessionhistorytree	default	chrome/skin/
+skin		sessionhistorytree	default	skin/
 
 # Locales
-locale		sessionhistorytree	en-US	chrome/locale/en-US/
-locale		sessionhistorytree	fr	chrome/locale/fr/
-locale		sessionhistorytree	hu-HU	chrome/locale/hu-HU/
-locale		sessionhistorytree	pt-BR	chrome/locale/pt-BR/
-locale		sessionhistorytree	sr	chrome/locale/sr/
-locale		sessionhistorytree	tr-TR	chrome/locale/tr-TR/
-locale		sessionhistorytree	sv-SE	chrome/locale/sv-SE/
-locale		sessionhistorytree	zh-CN	chrome/locale/zh-CN/
+locale		sessionhistorytree	en-US	locale/en-US/
+locale		sessionhistorytree	fr	locale/fr/
+locale		sessionhistorytree	hu-HU	locale/hu-HU/
+locale		sessionhistorytree	pt-BR	locale/pt-BR/
+locale		sessionhistorytree	sr	locale/sr/
+locale		sessionhistorytree	tr-TR	locale/tr-TR/
+locale		sessionhistorytree	sv-SE	locale/sv-SE/
+locale		sessionhistorytree	zh-CN	locale/zh-CN/
 
 # Overlays
 overlay	chrome://browser/content/browser.xul chrome://sessionhistorytree/content/browserOverlay.xul
@@ -23,8 +23,4 @@ overlay	chrome://browser/content/browser.xul chrome://sessionhistorytree/content
 # Stylesheets
 style	chrome://browser/content/browser.xul chrome://sessionhistorytree/skin/overlay.css
 style	chrome://browser/content/browser.xul chrome://sessionhistorytree/skin/button.css
-style	chrome://browser/content/browser.xul chrome://sessionhistorytree/skin/button-winfx4.css appversion>=4.0b1pre os=WINNT
-style	chrome://browser/content/browser.xul chrome://sessionhistorytree/skin/button-macfx4.css appversion>=4.0b1pre os=Darwin
 style	chrome://global/content/customizeToolbar.xul chrome://sessionhistorytree/skin/button.css
-style	chrome://browser/content/customizeToolbar.xul chrome://sessionhistorytree/skin/button-winfx4.css appversion>=4.0b1pre os=WINNT
-style	chrome://browser/content/customizeToolbar.xul chrome://sessionhistorytree/skin/button-macfx4.css appversion>=4.0b1pre os=Darwin

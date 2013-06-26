@@ -1,5 +1,5 @@
 /*
-    Session History Tree, extension for Firefox 4.0+
+    Session History Tree, extension for Firefox 13.0+
     Copyright (C) 2011  Daniel Dawson <ddawson@icehouse.net>
 
     This program is free software: you can redistribute it and/or modify
@@ -20,14 +20,11 @@ var EXPORTED_SYMBOLS = ["sessionHistoryTree"];
 
 const Cc = Components.classes, Ci = Components.interfaces,
       Cu = Components.utils;
+Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
 XPCOMUtils.defineLazyServiceGetter(
-  this, "consoleSvc", "@mozilla.org/consoleservice;1", "nsIConsoleService");
-XPCOMUtils.defineLazyServiceGetter(
   this, "sStore", "@mozilla.org/browser/sessionstore;1", "nsISessionStore");
-XPCOMUtils.defineLazyServiceGetter(
-  this, "ioSvc", "@mozilla.org/network/io-service;1", "nsIIOService");
 XPCOMUtils.defineLazyServiceGetter(
   this, "faviconSvc", "@mozilla.org/browser/favicon-service;1",
   "nsIFaviconService");
@@ -36,17 +33,15 @@ XPCOMUtils.defineLazyServiceGetter(
   "nsIPromptService");
 XPCOMUtils.defineLazyGetter(
   this, "prefs", function ()
-    Cc["@mozilla.org/preferences-service;1"].
-    getService(Ci.nsIPrefService).getBranch("extensions.sessionhistorytree."));
+    Services.prefs.getBranch("extensions.sessionhistorytree."));
 XPCOMUtils.defineLazyGetter(
   this, "strings", function ()
-    Cc["@mozilla.org/intl/stringbundle;1"].
-    getService(Ci.nsIStringBundleService).
-    createBundle("chrome://sessionhistorytree/locale/sht.properties"));
+    Services.strings.createBundle(
+      "chrome://sessionhistorytree/locale/sht.properties"));
 
 function log (aMsg) {
   if (prefs.getBoolPref("log"))
-    consoleSvc.logStringMessage("Session History Tree: " + aMsg);
+    Services.console.logStringMessage("Session History Tree: " + aMsg);
 }
 
 function thisWrap (func, thisObj)
@@ -484,7 +479,7 @@ function getSHTFillHistoryMenu (aOldFHM)
 
     for (let i = 0; i < children.length; i++) {
       let item = children[i];
-      item.className += " sessionhistorytree-item";
+      item.classList.add("sessionhistorytree-item");
       item.setAttribute("flex", "1");
       item.setAttribute("shtpath", path.toString());
       path.pop();
@@ -584,12 +579,16 @@ function fillTreeSubmenu (evt) {
       item.setAttribute("type", "radio");
       item.setAttribute("checked", "true");
     } else {
-      item.className += " menuitem-iconic";
-      let uri = ioSvc.newURI(entry.url, null, null);
+      item.classList.add("menuitem-iconic");
+      let uri = Services.io.newURI(entry.url, null, null);
 
       try {
-        let iconURL = faviconSvc.getFaviconForPage(uri).spec;
-        item.style.listStyleImage = "url(" + iconURL + ")";
+        let asyncItem = item;
+        faviconSvc.getFaviconURLForPage(
+          uri, { onComplete: function (aURI, aDataLen, aData, aMimeType) {
+            asyncItem.style.listStyleImage =
+              'url("' + faviconSvc.getFaviconLinkForIcon(aURI).spec + '")';
+          }});
       } catch (e) {}
     }
 

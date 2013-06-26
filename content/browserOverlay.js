@@ -1,5 +1,5 @@
 /*
-    Session History Tree, extension for Firefox 4.0+
+    Session History Tree, extension for Firefox 13.0+
     Copyright (C) 2011  Daniel Dawson <ddawson@icehouse.net>
 
     This program is free software: you can redistribute it and/or modify
@@ -16,13 +16,5 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-@namespace
-  url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
-
-#clear-sessionhistorytree-button {
-  list-style-image: url("chrome://sessionhistorytree/skin/treex24.png");
-}
-
-toolbar[iconsize="small"] #clear-sessionhistorytree-button {
-  list-style-image: url("chrome://sessionhistorytree/skin/treex16.png");
-}
+Cu.import("resource://sessionhistorytree/sessionHistoryTree.jsm");
+sessionHistoryTree.registerLoadHandler(window);
